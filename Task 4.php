@@ -1,8 +1,13 @@
 <?php 
 //input
 $inputs=array("Abc", "John", "cat", "Opera", "Noon","Tommmma");
+
 //Sample output
-//OperaAbccat
+//TommmmaAbccat
+
+//QA  : 
+
+
 
 //Step1 Find Longest string
 $longest_string="";

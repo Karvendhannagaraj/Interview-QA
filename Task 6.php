@@ -1,6 +1,9 @@
 <?php
-//output=1 8 3 6 5 4 7 2 9  
 $inputs=array(2,3,6,7,1,8,9,5,4,11,10);
+
+//output=1 10 3 8 5 6 7 4 9 2 11  
+//Arrange odd numbers in desending order and even numbers in ascending order one after the other.
+
 $even_array=array();
 $odd_array=array();
 foreach($inputs as $input)
@@ -16,7 +19,7 @@ foreach($inputs as $input)
    }
 }
 
-// even_array asending order Order sort
+// even_array ascending order Order sort
 for($i=0;$i<count($even_array);$i++)
 {
 	for($j=0;$j<count($even_array)-1;$j++)

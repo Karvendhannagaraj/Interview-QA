@@ -1,5 +1,9 @@
 <?php 
 $inputs="uvwxyz";
+
+// Find The Given string contains any vowels characters
+// Output  :  yes / No
+
 $array="aeiou";
 $split=str_split($array);
 $str_a=array();

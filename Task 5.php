@@ -1,6 +1,8 @@
 <?php
 $inputs="((abc)((de))";
 
+//Convert String to (abc)(de)
+
 function replace($strings,$str_replace,$str_replace_by)
 {
 	$strarray=explode($str_replace,$strings);

@@ -6,20 +6,20 @@ Programming Language:
 3. Isset & Empty 
 4. Switch Condition Example
 5. For & Foreach Differnent
-6. Codeginater Latest Version Feature Two
-7. How Many Way To Store Session Data ?
-8. What is FrameWork?
-9. Why using is Route?
-10. Explain the MVC Application life cycle.
-11. Explain some benefits of using MVC?
-12. How To Define the Url Params In Route?
-13. How many types of array are there in PHP?
+6. How Many Way To Store Session Data ?
+7. What is FrameWork?
+8. Explain the MVC Application life cycle.
+9. Explain some benefits of using MVC?
+10. Why using is Route?
+11. How To Define the Url Params In Route?
+12. How many types of array are there in PHP?
   13.1. Explain some of the PHP array functions?
   13.2. What is the difference between indexed and associative array?
 14. Explain some of the PHP string functions?
 15. DB Transaction 
 16. CSRF Token
 17. Try Catch Method
+
 
 
 
