@@ -1,0 +1,1239 @@
+HTTP Methods & Status Codes – Senior Developer Interview Guide
+
+1. What is an HTTP Method?
+
+An HTTP Method (Verb) defines the action that a client wants to perform on a resource in a REST API.
+
+Example:
+
+GET /users/10
+
+Meaning: Retrieve user with ID 10.
+
+POST /users
+
+Meaning: Create a new user.
+
+Think of HTTP methods as CRUD operations:
+
+CRUD	HTTP Method
+
+Create	POST
+Read	GET
+Update	PUT / PATCH
+Delete	DELETE
+
+
+
+---
+
+2. Types of HTTP Methods
+
+GET
+
+Retrieve data.
+
+GET /products
+GET /products/101
+
+Characteristics
+
+Read-only
+
+No data modification
+
+Cacheable
+
+Safe
+
+Idempotent
+
+
+
+---
+
+POST
+
+Create a new resource.
+
+POST /users
+
+Request Body:
+
+{
+  "name":"John"
+}
+
+Characteristics
+
+Creates resource
+
+Not idempotent
+
+Not cacheable by default
+
+
+
+---
+
+PUT
+
+Replace the entire resource.
+
+PUT /users/1
+
+{
+  "name":"John",
+  "email":"john@test.com"
+}
+
+Characteristics
+
+Full update
+
+Idempotent
+
+
+Calling 10 times = same result.
+
+
+---
+
+PATCH
+
+Partial update.
+
+PATCH /users/1
+
+{
+  "email":"new@test.com"
+}
+
+Characteristics
+
+Partial update
+
+Usually idempotent
+
+
+
+---
+
+DELETE
+
+Remove resource.
+
+DELETE /users/1
+
+Characteristics
+
+Deletes resource
+
+Idempotent
+
+
+Deleting same user multiple times should produce same final state.
+
+
+---
+
+HEAD
+
+Same as GET but returns headers only.
+
+HEAD /products
+
+Used for:
+
+Check resource existence
+
+Check file size
+
+Health checks
+
+
+
+---
+
+OPTIONS
+
+Returns supported methods.
+
+OPTIONS /users
+
+Response:
+
+Allow: GET,POST,PUT,DELETE
+
+Used heavily in:
+
+CORS Preflight Requests
+
+
+
+---
+
+TRACE
+
+Diagnostic method.
+
+Echoes request back.
+
+Rarely enabled because of security concerns.
+
+
+---
+
+CONNECT
+
+Creates a tunnel connection.
+
+Used by:
+
+HTTPS Proxies
+
+VPNs
+
+
+Rare in application development.
+
+
+---
+
+3. Why Different HTTP Methods Exist?
+
+Because each operation has a different meaning.
+
+Bad:
+
+POST /getUsers
+POST /deleteUser
+POST /updateUser
+
+Good:
+
+GET /users
+DELETE /users/1
+PUT /users/1
+POST /users
+
+Benefits:
+
+Clarity
+
+Easy to understand.
+
+Caching
+
+GET requests can be cached.
+
+Security
+
+Browsers understand safe operations.
+
+REST Standards
+
+Follows RESTful API design.
+
+Tool Compatibility
+
+Swagger, Postman, browsers, gateways all understand standard verbs.
+
+
+---
+
+4. HTTP Method Good Practices
+
+Use GET only for Reading
+
+❌ Wrong
+
+GET /deleteUser/1
+
+Can accidentally delete data.
+
+✅ Correct
+
+DELETE /users/1
+
+
+---
+
+Use POST for Creation
+
+POST /orders
+
+Not:
+
+PUT /createOrder
+
+
+---
+
+Use PUT for Full Update
+
+PUT /users/10
+
+Entire resource is sent.
+
+
+---
+
+Use PATCH for Partial Update
+
+PATCH /users/10
+
+Update only changed fields.
+
+
+---
+
+Keep APIs Resource-Oriented
+
+Bad:
+
+POST /createProduct
+POST /removeProduct
+
+Good:
+
+POST /products
+DELETE /products/1
+
+
+---
+
+Return Correct Status Codes
+
+Don't always return:
+
+200 OK
+
+Use meaningful codes.
+
+
+---
+
+Design Idempotent APIs
+
+Good:
+
+PUT /users/1
+
+Calling multiple times should not create duplicates.
+
+
+---
+
+Validate Request Body
+
+Return:
+
+400 Bad Request
+
+for invalid input.
+
+
+---
+
+HTTP Status Codes
+
+1xx Informational
+
+Rarely used.
+
+100 Continue
+101 Switching Protocols
+
+
+---
+
+2xx Success
+
+200 OK
+
+Request successful.
+
+GET /users
+
+
+---
+
+201 Created
+
+Resource created.
+
+POST /users
+
+
+---
+
+202 Accepted
+
+Request accepted for background processing.
+
+Example:
+
+POST /report-generation
+
+
+---
+
+204 No Content
+
+Success but no response body.
+
+DELETE /users/1
+
+
+---
+
+3xx Redirection
+
+301 Moved Permanently
+
+Permanent redirect.
+
+
+---
+
+302 Found
+
+Temporary redirect.
+
+
+---
+
+304 Not Modified
+
+Browser cache still valid.
+
+
+---
+
+4xx Client Errors
+
+400 Bad Request
+
+Invalid request.
+
+
+---
+
+401 Unauthorized
+
+Authentication required.
+
+
+---
+
+403 Forbidden
+
+Authenticated but access denied.
+
+
+---
+
+404 Not Found
+
+Resource doesn't exist.
+
+
+---
+
+405 Method Not Allowed
+
+Wrong HTTP method used.
+
+Example:
+
+POST /users/1
+
+when only GET is allowed.
+
+
+---
+
+409 Conflict
+
+Duplicate resource.
+
+Example:
+
+POST /users
+
+with existing email.
+
+
+---
+
+422 Unprocessable Entity
+
+Validation failure.
+
+{
+  "email":"invalid"
+}
+
+
+---
+
+429 Too Many Requests
+
+Rate limit exceeded.
+
+
+---
+
+5xx Server Errors
+
+500 Internal Server Error
+
+Unexpected exception.
+
+
+---
+
+502 Bad Gateway
+
+Proxy received invalid response.
+
+
+---
+
+503 Service Unavailable
+
+Server overloaded or maintenance.
+
+
+---
+
+504 Gateway Timeout
+
+Upstream service timeout.
+
+
+---
+
+5. Senior-Level Interview Questions
+
+Q1. Difference between PUT and PATCH?
+
+PUT
+
+Full resource replacement
+
+
+PATCH
+
+Partial update
+
+
+Example:
+
+PUT /users/1
+
+Sends all fields.
+
+PATCH /users/1
+
+Sends only modified fields.
+
+
+---
+
+Q2. What is Idempotency?
+
+An operation that produces the same result no matter how many times it is executed.
+
+Idempotent:
+
+GET
+PUT
+DELETE
+
+Not necessarily idempotent:
+
+POST
+
+
+---
+
+Q3. Why should GET not modify data?
+
+Because:
+
+Browsers cache GET
+
+Search engines crawl GET
+
+Refreshing page triggers GET
+
+
+Data modifications may happen unintentionally.
+
+
+---
+
+Q4. Difference between 401 and 403?
+
+401 Unauthorized
+
+Who are you?
+
+Authentication missing.
+
+403 Forbidden
+
+I know who you are,
+but you don't have permission.
+
+
+---
+
+Q5. When to use 200 vs 201?
+
+200
+
+Existing resource retrieved.
+
+201
+
+New resource created.
+
+
+---
+
+Q6. Why is DELETE idempotent?
+
+DELETE /users/1
+
+After first deletion:
+
+User no longer exists.
+
+Additional DELETE calls don't change the final state.
+
+
+---
+
+Q7. What status code should be returned after successful DELETE?
+
+Preferred:
+
+204 No Content
+
+or
+
+200 OK
+
+with response body.
+
+
+---
+
+Q8. What is CORS preflight request?
+
+Browser sends:
+
+OPTIONS
+
+request before actual request.
+
+Purpose:
+
+Verify allowed methods
+
+Verify allowed headers
+
+
+
+---
+
+Q9. Why use 429 status code?
+
+To indicate:
+
+Rate Limit Exceeded
+
+Common in public APIs.
+
+
+---
+
+Q10. Explain Safe vs Idempotent Methods.
+
+Method	Safe	Idempotent
+
+GET	Yes	Yes
+HEAD	Yes	Yes
+OPTIONS	Yes	Yes
+PUT	No	Yes
+PATCH	No	Usually
+DELETE	No	Yes
+POST	No	No
+
+
+
+---
+
+6. Quick Interview Revision (2-Minute Summary)
+
+HTTP Methods
+
+Method	Purpose
+
+GET	Read
+POST	Create
+PUT	Full Update
+PATCH	Partial Update
+DELETE	Remove
+HEAD	Headers Only
+OPTIONS	Supported Methods
+
+
+Most Important Status Codes
+
+Code	Meaning
+
+200	Success
+201	Created
+204	No Content
+400	Bad Request
+401	Unauthorized
+403	Forbidden
+404	Not Found
+409	Conflict
+422	Validation Error
+429	Too Many Requests
+500	Internal Error
+503	Service Unavailable
+
+
+Senior-Level Keywords
+
+RESTful API
+
+Resource-Oriented URLs
+
+Idempotency
+
+Safe Methods
+
+Caching
+
+CORS
+
+PUT vs PATCH
+
+401 vs 403
+
+200 vs 201
+
+Rate Limiting (429)
+
+Validation (422)
+
+
+Interview one-liner:
+
+> GET = Read, POST = Create, PUT = Replace, PATCH = Modify, DELETE = Remove. Use correct HTTP status codes, design idempotent APIs where possible, and keep endpoints resource-based rather than action-based.
+
+
+For a mid-level developer, what we covered is enough.
+
+For a senior developer, there are a few more important HTTP concepts that interviewers often expect you to know.
+
+
+---
+
+1. Safe vs Idempotent vs Cacheable
+
+Many developers know CRUD mapping but get confused here.
+
+Method	Safe	Idempotent	Cacheable
+
+GET	✅	✅	✅
+HEAD	✅	✅	✅
+OPTIONS	✅	✅	Usually
+PUT	❌	✅	❌
+PATCH	❌	Usually	❌
+DELETE	❌	✅	❌
+POST	❌	❌	Usually No
+
+
+Safe
+
+No data modification.
+
+Example:
+
+GET /products
+
+Only reads.
+
+
+---
+
+Idempotent
+
+Same request multiple times = same final state.
+
+Example:
+
+PUT /users/1
+
+Run 1 time or 100 times.
+
+Result remains same.
+
+
+---
+
+Cacheable
+
+Response can be stored.
+
+Example:
+
+GET /products
+
+Browser/CDN can cache.
+
+
+---
+
+2. REST API URL Design
+
+Bad:
+
+POST /createUser
+POST /deleteUser
+POST /updateUser
+
+Good:
+
+POST /users
+GET /users
+GET /users/1
+PUT /users/1
+DELETE /users/1
+
+Interviewers love asking:
+
+> "How would you design a User API?"
+
+
+
+
+---
+
+3. Content Negotiation
+
+Client can ask for specific response format.
+
+Request:
+
+Accept: application/json
+
+or
+
+Accept: application/xml
+
+Server responds accordingly.
+
+
+---
+
+4. Important Request Headers
+
+Authorization
+
+Authorization: Bearer JWT_TOKEN
+
+Authentication.
+
+
+---
+
+Content-Type
+
+Content-Type: application/json
+
+Tells server request body format.
+
+
+---
+
+Accept
+
+Accept: application/json
+
+Expected response format.
+
+
+---
+
+Origin
+
+Used in CORS.
+
+Origin: https://example.com
+
+
+---
+
+5. Important Response Headers
+
+Cache-Control
+
+Cache-Control: max-age=3600
+
+Cache for 1 hour.
+
+
+---
+
+Location
+
+After creation:
+
+HTTP/1.1 201 Created
+Location: /users/101
+
+Senior interview favorite.
+
+
+---
+
+Access-Control-Allow-Origin
+
+Access-Control-Allow-Origin: *
+
+CORS.
+
+
+---
+
+6. Conditional Requests
+
+Reduce unnecessary downloads.
+
+Browser sends:
+
+If-Modified-Since
+
+or
+
+If-None-Match
+
+Server returns:
+
+304 Not Modified
+
+No need to resend data.
+
+
+---
+
+7. ETag
+
+Resource fingerprint/version.
+
+Response:
+
+ETag: "abc123"
+
+Later:
+
+If-None-Match: "abc123"
+
+If unchanged:
+
+304 Not Modified
+
+Very common in scalable systems.
+
+
+---
+
+8. Rate Limiting
+
+Protect APIs.
+
+Response:
+
+429 Too Many Requests
+
+Headers:
+
+X-RateLimit-Limit
+X-RateLimit-Remaining
+
+Example:
+
+100 requests/minute
+
+
+
+---
+
+9. API Versioning
+
+URL Versioning
+
+/api/v1/users
+/api/v2/users
+
+Most common.
+
+
+---
+
+Header Versioning
+
+Accept: application/vnd.company.v2+json
+
+Less common.
+
+Interview Question:
+
+> How do you release breaking API changes?
+
+
+
+Answer:
+
+> API versioning.
+
+
+
+
+---
+
+10. Authentication vs Authorization
+
+Most frequently asked question.
+
+Authentication
+
+Who are you?
+
+401 Unauthorized
+
+Token missing/invalid.
+
+
+---
+
+Authorization
+
+Can you do this?
+
+403 Forbidden
+
+Permission denied.
+
+
+---
+
+11. HTTP vs HTTPS
+
+HTTP
+
+http://
+
+Plain text.
+
+
+---
+
+HTTPS
+
+https://
+
+Encrypted using TLS/SSL.
+
+Senior interviews almost always ask:
+
+> Why HTTPS?
+
+
+
+Answer:
+
+Encryption
+
+Integrity
+
+Authentication
+
+
+
+---
+
+12. CORS Deep Understanding
+
+Browser sends:
+
+OPTIONS
+
+Preflight request.
+
+Server responds:
+
+Access-Control-Allow-Origin
+Access-Control-Allow-Methods
+Access-Control-Allow-Headers
+
+Then actual request is sent.
+
+Question:
+
+> Why doesn't Postman face CORS issues?
+
+
+
+Answer:
+
+> CORS is enforced by browsers, not by servers or Postman.
+
+
+
+
+---
+
+13. Common Real-World Status Codes
+
+Login
+
+200 OK
+401 Unauthorized
+
+
+---
+
+Create User
+
+201 Created
+409 Conflict
+422 Validation Error
+
+
+---
+
+Delete User
+
+204 No Content
+
+
+---
+
+Server Crash
+
+500 Internal Server Error
+
+
+---
+
+14. Retryable Requests
+
+Good candidate for retry:
+
+GET
+PUT
+DELETE
+
+Usually avoid automatic retry:
+
+POST
+
+Reason:
+
+POST /orders
+
+Retry may create duplicate orders.
+
+
+---
+
+15. HTTP Interview Question That Surprises Seniors
+
+Why is PUT idempotent but POST is not?
+
+PUT:
+
+PUT /users/1
+
+Resource already identified.
+
+Final state remains same.
+
+POST:
+
+POST /users
+
+Every call may create a new resource.
+
+
+---
+
+Senior Developer HTTP Checklist
+
+If you know all of these, you're at a strong senior-level understanding:
+
+✅ HTTP Methods
+✅ Status Codes
+✅ Safe Methods
+✅ Idempotent Methods
+✅ Cacheable Methods
+✅ REST API Design
+✅ Headers (Authorization, Content-Type, Accept)
+✅ CORS & Preflight
+✅ ETag & 304
+✅ API Versioning
+✅ Rate Limiting (429)
+✅ Authentication vs Authorization
+✅ HTTP vs HTTPS
+✅ Retry Strategy
+✅ PUT vs PATCH
+✅ 401 vs 403
+✅ 200 vs 201 vs 204
+✅ 409 vs 422
+
+For a backend developer with your experience, I'd rank these topics by interview importance:
+
+1. REST URL Design
+
+
+2. HTTP Methods
+
+
+3. Status Codes
+
+
+4. Authentication vs Authorization
+
+
+5. CORS
+
+
+6. Idempotency
+
+
+7. API Versioning
+
+
+8. Rate Limiting
+
+
+9. Caching & ETag
+
+
+10. HTTPS/TLS basics
+
+
+
+Master those top 10 and you'll handle most senior backend interview questions on HTTP confidently.
+
+
