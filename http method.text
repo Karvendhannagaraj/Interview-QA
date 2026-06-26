@@ -1,3 +1,753 @@
+
+
+HTTP Methods & Status Codes – Senior Developer Interview Guide
+
+1. What is an HTTP Method?
+
+An HTTP Method (Verb) defines the action that a client wants to perform on a resource in a REST API.
+
+Example:
+
+GET /users/10
+
+Meaning: Retrieve user with ID 10.
+
+POST /users
+
+Meaning: Create a new user.
+
+Think of HTTP methods as CRUD operations:
+
+CRUD	HTTP Method
+
+Create	POST
+Read	GET
+Update	PUT / PATCH
+Delete	DELETE
+
+
+
+---
+
+2. Types of HTTP Methods
+
+GET
+
+Retrieve data.
+
+GET /products
+GET /products/101
+
+Characteristics
+
+Read-only
+
+No data modification
+
+Cacheable
+
+Safe
+
+Idempotent
+
+
+
+---
+
+POST
+
+Create a new resource.
+
+POST /users
+
+Request Body:
+
+{
+  "name":"John"
+}
+
+Characteristics
+
+Creates resource
+
+Not idempotent
+
+Not cacheable by default
+
+
+
+---
+
+PUT
+
+Replace the entire resource.
+
+PUT /users/1
+
+{
+  "name":"John",
+  "email":"john@test.com"
+}
+
+Characteristics
+
+Full update
+
+Idempotent
+
+
+Calling 10 times = same result.
+
+
+---
+
+PATCH
+
+Partial update.
+
+PATCH /users/1
+
+{
+  "email":"new@test.com"
+}
+
+Characteristics
+
+Partial update
+
+Usually idempotent
+
+
+
+---
+
+DELETE
+
+Remove resource.
+
+DELETE /users/1
+
+Characteristics
+
+Deletes resource
+
+Idempotent
+
+
+Deleting same user multiple times should produce same final state.
+
+
+---
+
+HEAD
+
+Same as GET but returns headers only.
+
+HEAD /products
+
+Used for:
+
+Check resource existence
+
+Check file size
+
+Health checks
+
+
+
+---
+
+OPTIONS
+
+Returns supported methods.
+
+OPTIONS /users
+
+Response:
+
+Allow: GET,POST,PUT,DELETE
+
+Used heavily in:
+
+CORS Preflight Requests
+
+
+
+---
+
+TRACE
+
+Diagnostic method.
+
+Echoes request back.
+
+Rarely enabled because of security concerns.
+
+
+---
+
+CONNECT
+
+Creates a tunnel connection.
+
+Used by:
+
+HTTPS Proxies
+
+VPNs
+
+
+Rare in application development.
+
+
+---
+
+3. Why Different HTTP Methods Exist?
+
+Because each operation has a different meaning.
+
+Bad:
+
+POST /getUsers
+POST /deleteUser
+POST /updateUser
+
+Good:
+
+GET /users
+DELETE /users/1
+PUT /users/1
+POST /users
+
+Benefits:
+
+Clarity
+
+Easy to understand.
+
+Caching
+
+GET requests can be cached.
+
+Security
+
+Browsers understand safe operations.
+
+REST Standards
+
+Follows RESTful API design.
+
+Tool Compatibility
+
+Swagger, Postman, browsers, gateways all understand standard verbs.
+
+
+---
+
+4. HTTP Method Good Practices
+
+Use GET only for Reading
+
+❌ Wrong
+
+GET /deleteUser/1
+
+Can accidentally delete data.
+
+✅ Correct
+
+DELETE /users/1
+
+
+---
+
+Use POST for Creation
+
+POST /orders
+
+Not:
+
+PUT /createOrder
+
+
+---
+
+Use PUT for Full Update
+
+PUT /users/10
+
+Entire resource is sent.
+
+
+---
+
+Use PATCH for Partial Update
+
+PATCH /users/10
+
+Update only changed fields.
+
+
+---
+
+Keep APIs Resource-Oriented
+
+Bad:
+
+POST /createProduct
+POST /removeProduct
+
+Good:
+
+POST /products
+DELETE /products/1
+
+
+---
+
+Return Correct Status Codes
+
+Don't always return:
+
+200 OK
+
+Use meaningful codes.
+
+
+---
+
+Design Idempotent APIs
+
+Good:
+
+PUT /users/1
+
+Calling multiple times should not create duplicates.
+
+
+---
+
+Validate Request Body
+
+Return:
+
+400 Bad Request
+
+for invalid input.
+
+
+---
+
+HTTP Status Codes
+
+1xx Informational
+
+Rarely used.
+
+100 Continue
+101 Switching Protocols
+
+
+---
+
+2xx Success
+
+200 OK
+
+Request successful.
+
+GET /users
+
+
+---
+
+201 Created
+
+Resource created.
+
+POST /users
+
+
+---
+
+202 Accepted
+
+Request accepted for background processing.
+
+Example:
+
+POST /report-generation
+
+
+---
+
+204 No Content
+
+Success but no response body.
+
+DELETE /users/1
+
+
+---
+
+3xx Redirection
+
+301 Moved Permanently
+
+Permanent redirect.
+
+
+---
+
+302 Found
+
+Temporary redirect.
+
+
+---
+
+304 Not Modified
+
+Browser cache still valid.
+
+
+---
+
+4xx Client Errors
+
+400 Bad Request
+
+Invalid request.
+
+
+---
+
+401 Unauthorized
+
+Authentication required.
+
+
+---
+
+403 Forbidden
+
+Authenticated but access denied.
+
+
+---
+
+404 Not Found
+
+Resource doesn't exist.
+
+
+---
+
+405 Method Not Allowed
+
+Wrong HTTP method used.
+
+Example:
+
+POST /users/1
+
+when only GET is allowed.
+
+
+---
+
+409 Conflict
+
+Duplicate resource.
+
+Example:
+
+POST /users
+
+with existing email.
+
+
+---
+
+422 Unprocessable Entity
+
+Validation failure.
+
+{
+  "email":"invalid"
+}
+
+
+---
+
+429 Too Many Requests
+
+Rate limit exceeded.
+
+
+---
+
+5xx Server Errors
+
+500 Internal Server Error
+
+Unexpected exception.
+
+
+---
+
+502 Bad Gateway
+
+Proxy received invalid response.
+
+
+---
+
+503 Service Unavailable
+
+Server overloaded or maintenance.
+
+
+---
+
+504 Gateway Timeout
+
+Upstream service timeout.
+
+
+---
+
+5. Senior-Level Interview Questions
+
+Q1. Difference between PUT and PATCH?
+
+PUT
+
+Full resource replacement
+
+
+PATCH
+
+Partial update
+
+
+Example:
+
+PUT /users/1
+
+Sends all fields.
+
+PATCH /users/1
+
+Sends only modified fields.
+
+
+---
+
+Q2. What is Idempotency?
+
+An operation that produces the same result no matter how many times it is executed.
+
+Idempotent:
+
+GET
+PUT
+DELETE
+
+Not necessarily idempotent:
+
+POST
+
+
+---
+
+Q3. Why should GET not modify data?
+
+Because:
+
+Browsers cache GET
+
+Search engines crawl GET
+
+Refreshing page triggers GET
+
+
+Data modifications may happen unintentionally.
+
+
+---
+
+Q4. Difference between 401 and 403?
+
+401 Unauthorized
+
+Who are you?
+
+Authentication missing.
+
+403 Forbidden
+
+I know who you are,
+but you don't have permission.
+
+
+---
+
+Q5. When to use 200 vs 201?
+
+200
+
+Existing resource retrieved.
+
+201
+
+New resource created.
+
+
+---
+
+Q6. Why is DELETE idempotent?
+
+DELETE /users/1
+
+After first deletion:
+
+User no longer exists.
+
+Additional DELETE calls don't change the final state.
+
+
+---
+
+Q7. What status code should be returned after successful DELETE?
+
+Preferred:
+
+204 No Content
+
+or
+
+200 OK
+
+with response body.
+
+
+---
+
+Q8. What is CORS preflight request?
+
+Browser sends:
+
+OPTIONS
+
+request before actual request.
+
+Purpose:
+
+Verify allowed methods
+
+Verify allowed headers
+
+
+
+---
+
+Q9. Why use 429 status code?
+
+To indicate:
+
+Rate Limit Exceeded
+
+Common in public APIs.
+
+
+---
+
+Q10. Explain Safe vs Idempotent Methods.
+
+Method	Safe	Idempotent
+
+GET	Yes	Yes
+HEAD	Yes	Yes
+OPTIONS	Yes	Yes
+PUT	No	Yes
+PATCH	No	Usually
+DELETE	No	Yes
+POST	No	No
+
+
+
+---
+
+6. Quick Interview Revision (2-Minute Summary)
+
+HTTP Methods
+
+Method	Purpose
+
+GET	Read
+POST	Create
+PUT	Full Update
+PATCH	Partial Update
+DELETE	Remove
+HEAD	Headers Only
+OPTIONS	Supported Methods
+
+
+Most Important Status Codes
+
+Code	Meaning
+
+200	Success
+201	Created
+204	No Content
+400	Bad Request
+401	Unauthorized
+403	Forbidden
+404	Not Found
+409	Conflict
+422	Validation Error
+429	Too Many Requests
+500	Internal Error
+503	Service Unavailable
+
+
+Senior-Level Keywords
+
+RESTful API
+
+Resource-Oriented URLs
+
+Idempotency
+
+Safe Methods
+
+Caching
+
+CORS
+
+PUT vs PATCH
+
+401 vs 403
+
+200 vs 201
+
+Rate Limiting (429)
+
+Validation (422)
+
+
+Interview one-liner:
+
+> GET = Read, POST = Create, PUT = Replace, PATCH = Modify, DELETE = Remove. Use correct HTTP status codes, design idempotent APIs where possible, and keep endpoints resource-based rather than action-based.
+
+
+
+
+
+
+
+
 For a mid-level developer, what we covered is enough.
 
 For a senior developer, there are a few more important HTTP concepts that interviewers often expect you to know.
